@@ -1,0 +1,14 @@
+type Query {
+  orders: [Order]
+}
+
+type Order {
+  date: String!
+  subtotal: Float!
+  items: [OrderItem]
+}
+
+type OrderItem {
+  product: Product!
+  quantity: Int!
+}
