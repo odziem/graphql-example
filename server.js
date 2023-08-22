@@ -1,7 +1,9 @@
 const path = require('path');
+const cors = require('cors');
 const express = require('express');
 
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
 
 const { loadFilesSync } = require('@graphql-tools/load-files');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
@@ -22,7 +24,11 @@ async function startApolloServer() {
   });
 
   await server.start();
-  server.applyMiddleware({ app, path: '/graphql' });
+
+  app.use(cors());
+  app.use(express.json());
+
+  app.use('/graphql', expressMiddleware(server));
 
   app.listen(3000, () => {
     console.log('Running GraphQL server...');
